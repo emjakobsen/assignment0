@@ -1,37 +1,54 @@
-name: build and test
+---
+name: Build and Test
 
 on:
   push:
-  pull_request:
-    branches: [ main ]
-    paths:
-    - '**.cs'
-    - '**.csproj'
+    branches:
+      - main
+      - "*.md"
 
-env:
-  DOTNET_VERSION: '5.0.301' # The .NET SDK version to use
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - "*.md"
+
+  workflow_dispatch:
 
 jobs:
-  build-and-test:
-
-    name: build-and-test-${{matrix.os}}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macOS-latest]
+  build:
+    name: Build & Test
+    runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: ${{ env.DOTNET_VERSION }}
+      - uses: actions/checkout@v3
 
-    - name: Install dependencies
-      run: dotnet restore
-      
-    - name: Build
-      run: dotnet build --configuration Release --no-restore
-    
-    - name: Test
-      run: dotnet test --no-restore --verbosity normal
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: 6.0.x
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Release
+
+      - name: Test
+        run: dotnet test --collect:"XPlat Code Coverage"
+
+      - name: Generate Report
+        uses: danielpalme/ReportGenerator-GitHub-Action@5.1.9
+        with:
+          reports: "**/coverage.cobertura.xml"
+          targetdir: coveragereport
+          reporttypes: Badges;Cobertura;HtmlInline
+          verbosity: Info
+          tag: ${{ github.run_number }}_${{ github.run_id }}
+          toolpath: reportgeneratortool
+
+      - name: Upload coverage report artifact
+        uses: actions/upload-artifact@v3.1.0
+        with:
+          name: CoverageReport
+          path: coveragereport
