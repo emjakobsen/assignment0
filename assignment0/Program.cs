@@ -7,13 +7,18 @@ class Program
         //Console.WriteLine("Hello, World!");
         
     
-
-        var a0 = new Assignment0Class();
-        int input = Convert.ToInt32(Console.ReadLine());
+        string userInput = Console.ReadLine();
+        int numericValue;
+        if (int.TryParse(userInput, out numericValue)){
+            var a0 = new Assignment0Class();
+        int input = Convert.ToInt32(userInput);
+        a0.isLeapYear(input);
+        }
         
         
         
-        Console.WriteLine(a0.isLeapYear(input));
+        
+        //Console.WriteLine(a0.isLeapYear(input));
     
         // med dotnet run <dit nummer> -- 0
         //Console.WriteLine(a0.isLeapYear(Int32.Parse(args[1])));
