@@ -1,6 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 //Console.WriteLine("Hello, World!");
 namespace assignment0;
+#pragma warning disable CS8600
 class Program 
 {
     static void Main (string[] args) {
@@ -12,7 +13,7 @@ class Program
         if (int.TryParse(userInput, out numericValue)){
             var a0 = new Assignment0Class();
              int input = Convert.ToInt32(userInput);
-             
+
             
             if(a0.isLeapYear(input)){
                 Console.WriteLine("yay");
