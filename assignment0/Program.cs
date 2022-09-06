@@ -11,8 +11,18 @@ class Program
         int numericValue;
         if (int.TryParse(userInput, out numericValue)){
             var a0 = new Assignment0Class();
-        int input = Convert.ToInt32(userInput);
-        a0.isLeapYear(input);
+             int input = Convert.ToInt32(userInput);
+             
+            
+            if(a0.isLeapYear(input)){
+                Console.WriteLine("yay");
+            }
+            else {
+                Console.WriteLine("nay");
+            }
+        }
+        else {
+            Console.WriteLine("User input must be a year after 1582.");
         }
         
         
